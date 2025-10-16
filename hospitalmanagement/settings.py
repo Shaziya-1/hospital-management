@@ -20,7 +20,9 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'your-default-secret-key')
 DEBUG = os.environ.get('DJANGO_DEBUG', 'False') == 'True'
 
 # Azure deployment: replace <your-app-name> with your Azure web app name
-ALLOWED_HOSTS = [os.environ.get('DJANGO_ALLOWED_HOST', '<your-app-name>.azurewebsites.net')]
+import os
+
+ALLOWED_HOSTS = [os.environ.get('DJANGO_ALLOWED_HOST', 'hospital-management.up.railway.app')]
 
 # Application definition
 INSTALLED_APPS = [
