@@ -1,0 +1,15 @@
+# Virtual environment
+myenv/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Database
+db.sqlite3
+
+# Collected static files
+staticfiles/
+
+# Media uploads (optional)
+media/
