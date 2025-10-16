@@ -14,7 +14,10 @@ import os
 from pathlib import Path
 import dj_database_url  # for Railway database support
 
-# Build paths inside the project
+# ---------------------------
+# BASE DIRECTORIES
+# ---------------------------
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates')
 STATIC_DIR = os.path.join(BASE_DIR, 'static')
@@ -23,13 +26,18 @@ STATIC_DIR = os.path.join(BASE_DIR, 'static')
 # SECURITY SETTINGS
 # ---------------------------
 
-SECRET_KEY = os.environ.get('SECRET_KEY', 'hpbv()ep00boce&o0w7z1h)st148(*m@6@-rk$nn)(n9ojj4c0')
+SECRET_KEY = os.environ.get(
+    'SECRET_KEY',
+    'hpbv()ep00boce&o0w7z1h)st148(*m@6@-rk$nn)(n9ojj4c0'
+)
 
 DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = ['*']  # or ['your-app-name.up.railway.app']
+ALLOWED_HOSTS = ['*']  # Change to your domain in production
 
-# Application definition
+# ---------------------------
+# APPLICATION DEFINITION
+# ---------------------------
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -38,13 +46,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-        'hospital',
-        'widget_tweaks',
+    'hospital',       # Your custom app
+    'widget_tweaks',  # For template form rendering
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',  # <--- for static files on Railway
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # Serve static files efficiently
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -58,7 +66,7 @@ ROOT_URLCONF = 'hospitalmanagement.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [TEMPLATE_DIR,],
+        'DIRS': [TEMPLATE_DIR],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -73,9 +81,9 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'hospitalmanagement.wsgi.application'
 
-
-# Database
-# https://docs.djangoproject.com/en/3.0/ref/settings/#databases
+# ---------------------------
+# DATABASE
+# ---------------------------
 
 DATABASES = {
     'default': {
@@ -84,9 +92,13 @@ DATABASES = {
     }
 }
 
+# If you are using Railway Postgres, you can override with:
+# db_from_env = dj_database_url.config(conn_max_age=600)
+# DATABASES['default'].update(db_from_env)
 
-# Password validation
-# https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
+# ---------------------------
+# PASSWORD VALIDATION
+# ---------------------------
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -103,53 +115,51 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
-# Internationalization
-# https://docs.djangoproject.com/en/3.0/topics/i18n/
+# ---------------------------
+# INTERNATIONALIZATION
+# ---------------------------
 
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
 USE_L10N = True
-
 USE_TZ = True
 
+# ---------------------------
+# STATIC FILES
+# ---------------------------
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/3.0/howto/static-files/
-
-STATIC_URL = '/static/'
-STATICFILES_DIRS = [STATIC_DIR]
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_URL = '/static/'                               # URL prefix for static files
+STATICFILES_DIRS = [STATIC_DIR]                       # Development folder
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')   # Collected files for production
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# ---------------------------
+# MEDIA FILES
+# ---------------------------
 
+MEDIA_URL = '/media/'                                
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')        
 
+# ---------------------------
+# LOGIN REDIRECT
+# ---------------------------
 
-LOGIN_REDIRECT_URL='/afterlogin'
+LOGIN_REDIRECT_URL = '/afterlogin'
 
-#for contact us give your gmail id and password
-EMAIL_BACKEND ='django.core.mail.backends.smtp.EmailBackend'
+# ---------------------------
+# EMAIL CONFIGURATION
+# ---------------------------
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'from@gmail.com' # this email will be used to send emails
-EMAIL_HOST_PASSWORD = 'xyz' # host email password required
-# now sign in with your host gmail account in your browser
-# open following link and turn it ON
-# https://myaccount.google.com/lesssecureapps
-# otherwise you will get SMTPAuthenticationError at /contactus
-# this process is required because google blocks apps authentication by default
-EMAIL_RECEIVING_USER = ['to@gmail.com'] # email on which you will receive messages sent from website
+EMAIL_HOST_USER = 'from@gmail.com'       # Replace with your sending email
+EMAIL_HOST_PASSWORD = 'xyz'              # Replace with your email password
+EMAIL_RECEIVING_USER = ['to@gmail.com']  # Receiving email list
 
-
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-
+# ---------------------------
 # DEFAULT PRIMARY KEY FIELD
 # ---------------------------
 

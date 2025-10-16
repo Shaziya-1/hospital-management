@@ -1,15 +1,44 @@
-# Virtual environment
+# ---------------------------
+# Python virtual environment
+# ---------------------------
 myenv/
+venv/
+env/
 
-# Python cache
+# ---------------------------
+# Python cache files
+# ---------------------------
 __pycache__/
 *.pyc
+*.pyo
+*.pyd
+*.log
 
-# Database
+# ---------------------------
+# Django database
+# ---------------------------
 db.sqlite3
 
-# Collected static files
+# ---------------------------
+# Static files collected by collectstatic
+# ---------------------------
 staticfiles/
 
-# Media uploads (optional)
+# ---------------------------
+# Media uploads (user uploads)
+# ---------------------------
 media/
+
+# ---------------------------
+# IDE/Editor specific files
+# ---------------------------
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# ---------------------------
+# OS generated files
+# ---------------------------
+.DS_Store
+Thumbs.db
