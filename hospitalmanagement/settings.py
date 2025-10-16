@@ -11,24 +11,23 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+from pathlib import Path
+import dj_database_url  # for Railway database support
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-TEMPLATE_DIR = os.path.join(BASE_DIR,'templates')
-STATIC_DIR=os.path.join(BASE_DIR,'static')
+# Build paths inside the project
+BASE_DIR = Path(__file__).resolve().parent.parent
+TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates')
+STATIC_DIR = os.path.join(BASE_DIR, 'static')
 
+# ---------------------------
+# SECURITY SETTINGS
+# ---------------------------
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
+SECRET_KEY = os.environ.get('SECRET_KEY', 'hpbv()ep00boce&o0w7z1h)st148(*m@6@-rk$nn)(n9ojj4c0')
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'hpbv()ep00boce&o0w7z1h)st148(*m@6@-rk$nn)(n9ojj4c0'
+DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = ['*']
-
+ALLOWED_HOSTS = ['*']  # or ['your-app-name.up.railway.app']
 
 # Application definition
 
@@ -45,6 +44,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # <--- for static files on Railway
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -122,12 +122,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [STATIC_DIR]   # your existing static folder
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # collected static for deployment
+STATICFILES_DIRS = [STATIC_DIR]
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # uploaded files
-
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
 
@@ -149,3 +149,8 @@ EMAIL_RECEIVING_USER = ['to@gmail.com'] # email on which you will receive messag
 
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+# DEFAULT PRIMARY KEY FIELD
+# ---------------------------
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
