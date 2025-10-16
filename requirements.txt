@@ -31,3 +31,6 @@ tzlocal==5.3.1
 uritools==5.0.0
 urllib3==2.5.0
 webencodings==0.5.1
+Django==4.2
+psycopg2-binary
+gunicorn
