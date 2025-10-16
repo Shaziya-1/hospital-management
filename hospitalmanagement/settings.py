@@ -1,27 +1,22 @@
 """
 Django settings for hospitalmanagement project.
-Adapted for production deployment on Azure.
+Configured for Railway deployment (production-ready).
 """
 
 import os
 from pathlib import Path
-import dj_database_url  # for Railway database support
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+# Build paths inside the project
 BASE_DIR = Path(__file__).resolve().parent.parent
 TEMPLATE_DIR = BASE_DIR / 'templates'
 STATIC_DIR = BASE_DIR / 'static'
 MEDIA_DIR = BASE_DIR / 'media'
 
-# SECURITY WARNING: keep the secret key used in production secret!
+# SECURITY
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'your-default-secret-key')
-
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DJANGO_DEBUG', 'False') == 'True'
 
-# Azure deployment: replace <your-app-name> with your Azure web app name
-import os
-
+# Railway app URL: replace with your actual Railway URL
 ALLOWED_HOSTS = [os.environ.get('DJANGO_ALLOWED_HOST', 'hospital-management.up.railway.app')]
 
 # Application definition
@@ -67,8 +62,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'hospitalmanagement.wsgi.application'
 
-# Database configuration (default: SQLite)
-# For production, you should use Azure PostgreSQL or MySQL
+# Database
 DATABASES = {
     'default': {
         'ENGINE': os.environ.get('DB_ENGINE', 'django.db.backends.sqlite3'),
@@ -98,9 +92,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [STATIC_DIR]
-STATIC_ROOT = BASE_DIR / 'staticfiles'  # For collectstatic in production
-
-# Use WhiteNoise to serve static files
+STATIC_ROOT = BASE_DIR / 'staticfiles'  # For collectstatic
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Media files
@@ -116,7 +108,7 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', 'from@gmail.com')
-EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', 'xyz')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', 'your-email-password')
 EMAIL_RECEIVING_USER = os.environ.get('EMAIL_RECEIVING_USER', 'to@gmail.com').split(',')
 
 # Security settings for production
