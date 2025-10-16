@@ -20,11 +20,6 @@ __pycache__/
 db.sqlite3
 
 # ---------------------------
-# Static files collected by collectstatic
-# ---------------------------
-staticfiles/
-
-# ---------------------------
 # Media uploads (user uploads)
 # ---------------------------
 media/

@@ -131,8 +131,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'                               # URL prefix for static files
 STATICFILES_DIRS = [STATIC_DIR]                       # Development folder
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')   # Collected files for production
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')   # Collected files for production
+# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # ---------------------------
 # MEDIA FILES
