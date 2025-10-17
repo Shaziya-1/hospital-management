@@ -17,7 +17,7 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'your-default-secret-key')
 DEBUG = os.environ.get('DJANGO_DEBUG', 'False') == 'True'
 
 # Railway app URL: replace with your actual Railway URL
-ALLOWED_HOSTS = [os.environ.get('DJANGO_ALLOWED_HOST', 'hospital-management.up.railway.app')]
+ALLOWED_HOSTS = ['hospital-management-production-bdc6.up.railway.app', 'localhost', '127.0.0.1']
 
 # Application definition
 INSTALLED_APPS = [
