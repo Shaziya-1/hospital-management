@@ -10,7 +10,11 @@ from django.conf import settings
 from django.db.models import Q
 from django.contrib.auth import logout as auth_logout
 from django.shortcuts import render, redirect, reverse, get_object_or_404
+from django.views.decorators.csrf import csrf_exempt
 
+
+
+@csrf_exempt
 def logout_view(request):
     auth_logout(request)
     return redirect('/') 
@@ -23,6 +27,7 @@ def home_view(request):
 
 
 #for showing signup/login button for admin
+@csrf_exempt
 def adminclick_view(request):
     if request.user.is_authenticated:
         return HttpResponseRedirect('afterlogin')
@@ -30,6 +35,7 @@ def adminclick_view(request):
 
 
 #for showing signup/login button for doctor
+@csrf_exempt
 def doctorclick_view(request):
     if request.user.is_authenticated:
         return HttpResponseRedirect('afterlogin')
@@ -37,6 +43,7 @@ def doctorclick_view(request):
 
 
 #for showing signup/login button for patient
+@csrf_exempt
 def patientclick_view(request):
     if request.user.is_authenticated:
         return HttpResponseRedirect('afterlogin')
@@ -44,7 +51,7 @@ def patientclick_view(request):
 
 
 
-
+@csrf_exempt
 def admin_signup_view(request):
     form=forms.AdminSigupForm()
     if request.method=='POST':
@@ -60,7 +67,7 @@ def admin_signup_view(request):
 
 
 
-
+@csrf_exempt
 def doctor_signup_view(request):
     userForm=forms.DoctorUserForm()
     doctorForm=forms.DoctorForm()
@@ -80,7 +87,7 @@ def doctor_signup_view(request):
         return HttpResponseRedirect('doctorlogin')
     return render(request,'hospital/doctorsignup.html',context=mydict)
 
-
+@csrf_exempt
 def patient_signup_view(request):
     userForm=forms.PatientUserForm()
     patientForm=forms.PatientForm()
@@ -107,6 +114,7 @@ def patient_signup_view(request):
 
 
 #-----------for checking user is doctor , patient or admin
+@csrf_exempt
 def is_admin(user):
     return user.groups.filter(name='ADMIN').exists()
 def is_doctor(user):
@@ -116,6 +124,7 @@ def is_patient(user):
 
 
 #---------AFTER ENTERING CREDENTIALS WE CHECK WHETHER USERNAME AND PASSWORD IS OF ADMIN,DOCTOR OR PATIENT
+@csrf_exempt
 def afterlogin_view(request):
     if is_admin(request.user):
         return redirect('admin-dashboard')
@@ -142,6 +151,7 @@ def afterlogin_view(request):
 #---------------------------------------------------------------------------------
 #------------------------ ADMIN RELATED VIEWS START ------------------------------
 #---------------------------------------------------------------------------------
+@csrf_exempt
 @login_required(login_url='adminlogin')
 @user_passes_test(is_admin)
 def admin_dashboard_view(request):
@@ -171,13 +181,14 @@ def admin_dashboard_view(request):
 
 
 # this view for sidebar click on admin page
+@csrf_exempt
 @login_required(login_url='adminlogin')
 @user_passes_test(is_admin)
 def admin_doctor_view(request):
     return render(request,'hospital/admin_doctor.html')
 
 
-
+@csrf_exempt
 @login_required(login_url='adminlogin')
 @user_passes_test(is_admin)
 def admin_view_doctor_view(request):
@@ -185,7 +196,7 @@ def admin_view_doctor_view(request):
     return render(request,'hospital/admin_view_doctor.html',{'doctors':doctors})
 
 
-
+@csrf_exempt
 @login_required(login_url='adminlogin')
 @user_passes_test(is_admin)
 def delete_doctor_from_hospital_view(request,pk):
@@ -196,7 +207,7 @@ def delete_doctor_from_hospital_view(request,pk):
     return redirect('admin-view-doctor')
 
 
-
+@csrf_exempt
 @login_required(login_url='adminlogin')
 @user_passes_test(is_admin)
 def update_doctor_view(request,pk):
@@ -221,7 +232,7 @@ def update_doctor_view(request,pk):
 
 
 
-
+@csrf_exempt
 @login_required(login_url='adminlogin')
 @user_passes_test(is_admin)
 def admin_add_doctor_view(request):
@@ -249,7 +260,7 @@ def admin_add_doctor_view(request):
 
 
 
-
+@csrf_exempt
 @login_required(login_url='adminlogin')
 @user_passes_test(is_admin)
 def admin_approve_doctor_view(request):
@@ -257,7 +268,7 @@ def admin_approve_doctor_view(request):
     doctors=models.Doctor.objects.all().filter(status=False)
     return render(request,'hospital/admin_approve_doctor.html',{'doctors':doctors})
 
-
+@csrf_exempt
 @login_required(login_url='adminlogin')
 @user_passes_test(is_admin)
 def approve_doctor_view(request,pk):
@@ -266,7 +277,7 @@ def approve_doctor_view(request,pk):
     doctor.save()
     return redirect(reverse('admin-approve-doctor'))
 
-
+@csrf_exempt
 @login_required(login_url='adminlogin')
 @user_passes_test(is_admin)
 def reject_doctor_view(request,pk):
@@ -277,7 +288,7 @@ def reject_doctor_view(request,pk):
     return redirect('admin-approve-doctor')
 
 
-
+@csrf_exempt
 @login_required(login_url='adminlogin')
 @user_passes_test(is_admin)
 def admin_view_doctor_specialisation_view(request):
@@ -285,14 +296,14 @@ def admin_view_doctor_specialisation_view(request):
     return render(request,'hospital/admin_view_doctor_specialisation.html',{'doctors':doctors})
 
 
-
+@csrf_exempt
 @login_required(login_url='adminlogin')
 @user_passes_test(is_admin)
 def admin_patient_view(request):
     return render(request,'hospital/admin_patient.html')
 
 
-
+@csrf_exempt
 @login_required(login_url='adminlogin')
 @user_passes_test(is_admin)
 def admin_view_patient_view(request):
@@ -300,7 +311,7 @@ def admin_view_patient_view(request):
     return render(request,'hospital/admin_view_patient.html',{'patients':patients})
 
 
-
+@csrf_exempt
 @login_required(login_url='adminlogin')
 @user_passes_test(is_admin)
 def delete_patient_from_hospital_view(request,pk):
@@ -311,7 +322,7 @@ def delete_patient_from_hospital_view(request,pk):
     return redirect('admin-view-patient')
 
 
-
+@csrf_exempt
 @login_required(login_url='adminlogin')
 @user_passes_test(is_admin)
 def update_patient_view(request,pk):
@@ -338,7 +349,7 @@ def update_patient_view(request,pk):
 
 
 
-
+@csrf_exempt
 @login_required(login_url='adminlogin')
 @user_passes_test(is_admin)
 def admin_add_patient_view(request):
@@ -368,6 +379,7 @@ def admin_add_patient_view(request):
 
 
 #------------------FOR APPROVING PATIENT BY ADMIN----------------------
+@csrf_exempt
 @login_required(login_url='adminlogin')
 @user_passes_test(is_admin)
 def admin_approve_patient_view(request):
@@ -376,7 +388,7 @@ def admin_approve_patient_view(request):
     return render(request,'hospital/admin_approve_patient.html',{'patients':patients})
 
 
-
+@csrf_exempt
 @login_required(login_url='adminlogin')
 @user_passes_test(is_admin)
 def approve_patient_view(request,pk):
@@ -386,7 +398,7 @@ def approve_patient_view(request,pk):
     return redirect(reverse('admin-approve-patient'))
 
 
-
+@csrf_exempt
 @login_required(login_url='adminlogin')
 @user_passes_test(is_admin)
 def reject_patient_view(request,pk):
@@ -399,6 +411,7 @@ def reject_patient_view(request,pk):
 
 
 #--------------------- FOR DISCHARGING PATIENT BY ADMIN START-------------------------
+@csrf_exempt
 @login_required(login_url='adminlogin')
 @user_passes_test(is_admin)
 def admin_discharge_patient_view(request):
@@ -406,7 +419,7 @@ def admin_discharge_patient_view(request):
     return render(request,'hospital/admin_discharge_patient.html',{'patients':patients})
 
 
-
+@csrf_exempt
 @login_required(login_url='adminlogin')
 @user_passes_test(is_admin)
 def discharge_patient_view(request, pk):
@@ -479,7 +492,7 @@ from django.template.loader import get_template
 from django.template import Context
 from django.http import HttpResponse
 
-
+@csrf_exempt
 def render_to_pdf(template_src, context_dict):
     template = get_template(template_src)
     html  = template.render(context_dict)
@@ -490,7 +503,7 @@ def render_to_pdf(template_src, context_dict):
     return
 
 
-
+@csrf_exempt
 def download_pdf_view(request, pk):
     dischargeDetails = models.PatientDischargeDetails.objects.filter(patientId=pk).order_by('-id').first()
 
@@ -520,13 +533,14 @@ def download_pdf_view(request, pk):
 
 
 #-----------------APPOINTMENT START--------------------------------------------------------------------
+@csrf_exempt
 @login_required(login_url='adminlogin')
 @user_passes_test(is_admin)
 def admin_appointment_view(request):
     return render(request,'hospital/admin_appointment.html')
 
 
-
+@csrf_exempt
 @login_required(login_url='adminlogin')
 @user_passes_test(is_admin)
 def admin_view_appointment_view(request):
@@ -534,7 +548,7 @@ def admin_view_appointment_view(request):
     return render(request,'hospital/admin_view_appointment.html',{'appointments':appointments})
 
 
-
+@csrf_exempt
 @login_required(login_url='adminlogin')
 @user_passes_test(is_admin)
 def admin_add_appointment_view(request):
@@ -554,7 +568,7 @@ def admin_add_appointment_view(request):
     return render(request,'hospital/admin_add_appointment.html',context=mydict)
 
 
-
+@csrf_exempt
 @login_required(login_url='adminlogin')
 @user_passes_test(is_admin)
 def admin_approve_appointment_view(request):
@@ -563,7 +577,7 @@ def admin_approve_appointment_view(request):
     return render(request,'hospital/admin_approve_appointment.html',{'appointments':appointments})
 
 
-
+@csrf_exempt
 @login_required(login_url='adminlogin')
 @user_passes_test(is_admin)
 def approve_appointment_view(request,pk):
@@ -573,7 +587,7 @@ def approve_appointment_view(request,pk):
     return redirect(reverse('admin-approve-appointment'))
 
 
-
+@csrf_exempt
 @login_required(login_url='adminlogin')
 @user_passes_test(is_admin)
 def reject_appointment_view(request,pk):
@@ -592,6 +606,7 @@ def reject_appointment_view(request,pk):
 #---------------------------------------------------------------------------------
 #------------------------ DOCTOR RELATED VIEWS START ------------------------------
 #---------------------------------------------------------------------------------
+@csrf_exempt
 @login_required(login_url='doctorlogin')
 @user_passes_test(is_doctor)
 def doctor_dashboard_view(request):
@@ -617,7 +632,7 @@ def doctor_dashboard_view(request):
     return render(request,'hospital/doctor_dashboard.html',context=mydict)
 
 
-
+@csrf_exempt
 @login_required(login_url='doctorlogin')
 @user_passes_test(is_doctor)
 def doctor_patient_view(request):
@@ -629,7 +644,7 @@ def doctor_patient_view(request):
 
 
 
-
+@csrf_exempt
 @login_required(login_url='doctorlogin')
 @user_passes_test(is_doctor)
 def doctor_view_patient_view(request):
@@ -637,7 +652,7 @@ def doctor_view_patient_view(request):
     doctor=models.Doctor.objects.get(user_id=request.user.id) #for profile picture of doctor in sidebar
     return render(request,'hospital/doctor_view_patient.html',{'patients':patients,'doctor':doctor})
 
-
+@csrf_exempt
 @login_required(login_url='doctorlogin')
 @user_passes_test(is_doctor)
 def search_view(request):
@@ -648,7 +663,7 @@ def search_view(request):
     return render(request,'hospital/doctor_view_patient.html',{'patients':patients,'doctor':doctor})
 
 
-
+@csrf_exempt
 @login_required(login_url='doctorlogin')
 @user_passes_test(is_doctor)
 def doctor_view_discharge_patient_view(request):
@@ -657,7 +672,7 @@ def doctor_view_discharge_patient_view(request):
     return render(request,'hospital/doctor_view_discharge_patient.html',{'dischargedpatients':dischargedpatients,'doctor':doctor})
 
 
-
+@csrf_exempt
 @login_required(login_url='doctorlogin')
 @user_passes_test(is_doctor)
 def doctor_appointment_view(request):
@@ -665,7 +680,7 @@ def doctor_appointment_view(request):
     return render(request,'hospital/doctor_appointment.html',{'doctor':doctor})
 
 
-
+@csrf_exempt
 @login_required(login_url='doctorlogin')
 @user_passes_test(is_doctor)
 def doctor_view_appointment_view(request):
@@ -679,7 +694,7 @@ def doctor_view_appointment_view(request):
     return render(request,'hospital/doctor_view_appointment.html',{'appointments':appointments,'doctor':doctor})
 
 
-
+@csrf_exempt
 @login_required(login_url='doctorlogin')
 @user_passes_test(is_doctor)
 def doctor_delete_appointment_view(request):
@@ -693,7 +708,7 @@ def doctor_delete_appointment_view(request):
     return render(request,'hospital/doctor_delete_appointment.html',{'appointments':appointments,'doctor':doctor})
 
 
-
+@csrf_exempt
 @login_required(login_url='doctorlogin')
 @user_passes_test(is_doctor)
 def delete_appointment_view(request,pk):
@@ -722,6 +737,7 @@ def delete_appointment_view(request,pk):
 #---------------------------------------------------------------------------------
 #------------------------ PATIENT RELATED VIEWS START ------------------------------
 #---------------------------------------------------------------------------------
+@csrf_exempt
 @login_required(login_url='patientlogin')
 @user_passes_test(is_patient)
 def patient_dashboard_view(request):
@@ -757,7 +773,7 @@ def patient_dashboard_view(request):
 
 
 
-
+@csrf_exempt
 @login_required(login_url='patientlogin')
 @user_passes_test(is_patient)
 def patient_appointment_view(request):
@@ -765,7 +781,7 @@ def patient_appointment_view(request):
     return render(request,'hospital/patient_appointment.html',{'patient':patient})
 
 
-
+@csrf_exempt
 @login_required(login_url='patientlogin')
 @user_passes_test(is_patient)
 def patient_book_appointment_view(request):
@@ -792,14 +808,14 @@ def patient_book_appointment_view(request):
     return render(request,'hospital/patient_book_appointment.html',context=mydict)
 
 
-
+@csrf_exempt
 def patient_view_doctor_view(request):
     doctors=models.Doctor.objects.all().filter(status=True)
     patient=models.Patient.objects.get(user_id=request.user.id) #for profile picture of patient in sidebar
     return render(request,'hospital/patient_view_doctor.html',{'patient':patient,'doctors':doctors})
 
 
-
+@csrf_exempt
 def search_doctor_view(request):
     patient=models.Patient.objects.get(user_id=request.user.id) #for profile picture of patient in sidebar
     
@@ -810,7 +826,7 @@ def search_doctor_view(request):
 
 
 
-
+@csrf_exempt
 @login_required(login_url='patientlogin')
 @user_passes_test(is_patient)
 def patient_view_appointment_view(request):
@@ -819,7 +835,7 @@ def patient_view_appointment_view(request):
     return render(request,'hospital/patient_view_appointment.html',{'appointments':appointments,'patient':patient})
 
 
-
+@csrf_exempt
 @login_required(login_url='patientlogin')
 @user_passes_test(is_patient)
 def patient_discharge_view(request):
@@ -868,9 +884,11 @@ def patient_discharge_view(request):
 #---------------------------------------------------------------------------------
 #------------------------ ABOUT US AND CONTACT US VIEWS START ------------------------------
 #---------------------------------------------------------------------------------
+@csrf_exempt
 def aboutus_view(request):
     return render(request,'hospital/aboutus.html')
 
+@csrf_exempt
 def contactus_view(request):
     sub = forms.ContactusForm()
     if request.method == 'POST':
