@@ -1,6 +1,6 @@
 """
 Django settings for hospitalmanagement project.
-Configured for Railway deployment (production-ready).
+Configured for local development (no Railway deployment).
 """
 
 import os
@@ -13,11 +13,12 @@ STATIC_DIR = BASE_DIR / 'static'
 MEDIA_DIR = BASE_DIR / 'media'
 
 # SECURITY
-SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'your-default-secret-key')
-DEBUG = os.environ.get('DJANGO_DEBUG', 'False') == 'True'
+SECRET_KEY = 'your-secret-key-for-local-dev'  # Replace with your own key
+DEBUG = True  # Local development
 
-# Railway app URL: replace with your actual Railway URL
-ALLOWED_HOSTS = ['hospital-management-production-bdc6.up.railway.app', 'localhost', '127.0.0.1']
+# Allowed hosts for local development
+# ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+ALLOWED_HOSTS = [os.environ.get('WEBSITE_HOSTNAME'), 'hospitalmanagement2zy.azurewebsites.net']
 
 # Application definition
 INSTALLED_APPS = [
@@ -65,12 +66,8 @@ WSGI_APPLICATION = 'hospitalmanagement.wsgi.application'
 # Database
 DATABASES = {
     'default': {
-        'ENGINE': os.environ.get('DB_ENGINE', 'django.db.backends.sqlite3'),
-        'NAME': os.environ.get('DB_NAME', BASE_DIR / 'db.sqlite3'),
-        'USER': os.environ.get('DB_USER', ''),
-        'PASSWORD': os.environ.get('DB_PASSWORD', ''),
-        'HOST': os.environ.get('DB_HOST', ''),
-        'PORT': os.environ.get('DB_PORT', ''),
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
@@ -102,19 +99,13 @@ MEDIA_ROOT = MEDIA_DIR
 # Login redirect
 LOGIN_REDIRECT_URL = '/afterlogin'
 
-# Email configuration (Gmail SMTP)
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_USE_TLS = True
-EMAIL_PORT = 587
-EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', 'from@gmail.com')
-EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', 'your-email-password')
-EMAIL_RECEIVING_USER = os.environ.get('EMAIL_RECEIVING_USER', 'to@gmail.com').split(',')
+# Email configuration (optional, for testing locally you can leave defaults)
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-# Security settings for production
-SECURE_SSL_REDIRECT = True
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
+# Security settings for local development
+SECURE_SSL_REDIRECT = False
+SESSION_COOKIE_SECURE = False
+CSRF_COOKIE_SECURE = False
 
 # Default auto field
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
