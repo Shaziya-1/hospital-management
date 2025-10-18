@@ -21,6 +21,10 @@ DEBUG = True  # Local development
 ALLOWED_HOSTS = [os.environ.get('WEBSITE_HOSTNAME'), 'hospitalmanagement2zy.azurewebsites.net']
 CSRF_TRUSTED_ORIGINS = ['https://hospitalmanagement2zy.azurewebsites.net']
 
+# Ensure Django recognizes HTTPS behind Azure proxy
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
 
 # Application definition
 INSTALLED_APPS = [
