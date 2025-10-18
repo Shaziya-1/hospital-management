@@ -1,41 +1,47 @@
 """
 Django settings for hospitalmanagement project.
-Configured for local development (no Railway deployment).
+Configured for Azure deployment.
 """
 
 import os
 from pathlib import Path
 
-# Build paths inside the project
+# ---------------------------------------------------------------------
+# BASE DIRECTORIES
+# ---------------------------------------------------------------------
 BASE_DIR = Path(__file__).resolve().parent.parent
 TEMPLATE_DIR = BASE_DIR / 'templates'
 STATIC_DIR = BASE_DIR / 'static'
 MEDIA_DIR = BASE_DIR / 'media'
 
-# SECURITY
-SECRET_KEY = 'your-secret-key-for-local-dev'  # Replace with your own key
-DEBUG = True  # Local development
-
-# Allowed hosts for local development
-# ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+# ---------------------------------------------------------------------
+# SECURITY SETTINGS
+# ---------------------------------------------------------------------
+SECRET_KEY = 'your-secret-key-for-local-dev'  # Replace with a secure one
+DEBUG = False  # ⚠️ Set to False for production
 
 ALLOWED_HOSTS = [
-    'hospitalmanagement2zy-cfd9ahhud4cab6a6.centralindia-01.azurewebsites.net'
+    'hospitalmanagement2zy-cfd9ahhud4cab6a6.centralindia-01.azurewebsites.net',
 ]
 
 
 # settings.py
 CSRF_TRUSTED_ORIGINS = [
-    'https://hospitalmanagement2zy-cfd9ahhud4cab6a6.centralindia-01.azurewebsites.net'
+    'https://hospitalmanagement2zy-cfd9ahhud4cab6a6.centralindia-01.azurewebsites.net',
+    'https://*.centralindia-01.azurewebsites.net',  # optional wildcard
 ]
 
-# Ensure Django recognizes HTTPS behind Azure proxy
+# Recognize HTTPS behind Azure’s reverse proxy
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-CSRF_COOKIE_SECURE = True
+
+# Force HTTPS
+SECURE_SSL_REDIRECT = True
 SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
 
-
-# Application definition
+# ---------------------------------------------------------------------
+# APPLICATION DEFINITION
+# ---------------------------------------------------------------------
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -78,7 +84,9 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'hospitalmanagement.wsgi.application'
 
-# Database
+# ---------------------------------------------------------------------
+# DATABASE
+# ---------------------------------------------------------------------
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -86,41 +94,46 @@ DATABASES = {
     }
 }
 
-# Password validation
+# ---------------------------------------------------------------------
+# PASSWORD VALIDATION
+# ---------------------------------------------------------------------
 AUTH_PASSWORD_VALIDATORS = [
-    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',},
-    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',},
-    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',},
-    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',},
+    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
-# Internationalization
+# ---------------------------------------------------------------------
+# INTERNATIONALIZATION
+# ---------------------------------------------------------------------
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 
-# Static files (CSS, JavaScript, Images)
+# ---------------------------------------------------------------------
+# STATIC & MEDIA FILES
+# ---------------------------------------------------------------------
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [STATIC_DIR]
-STATIC_ROOT = BASE_DIR / 'staticfiles'  # For collectstatic
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Media files
 MEDIA_URL = '/media/'
 MEDIA_ROOT = MEDIA_DIR
 
-# Login redirect
+# ---------------------------------------------------------------------
+# LOGIN & EMAIL
+# ---------------------------------------------------------------------
 LOGIN_REDIRECT_URL = '/afterlogin'
 
 # Email configuration (optional, for testing locally you can leave defaults)
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-# Security settings for local development
-SECURE_SSL_REDIRECT = False
-SESSION_COOKIE_SECURE = False
-CSRF_COOKIE_SECURE = False
-
-# Default auto field
+# ---------------------------------------------------------------------
+# DEFAULT AUTO FIELD
+# ---------------------------------------------------------------------
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
