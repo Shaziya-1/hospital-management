@@ -19,6 +19,8 @@ DEBUG = True  # Local development
 # Allowed hosts for local development
 # ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 ALLOWED_HOSTS = [os.environ.get('WEBSITE_HOSTNAME'), 'hospitalmanagement2zy.azurewebsites.net']
+CSRF_TRUSTED_ORIGINS = ['https://hospitalmanagement2zy.azurewebsites.net']
+
 
 # Application definition
 INSTALLED_APPS = [
