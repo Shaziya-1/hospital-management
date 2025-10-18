@@ -18,8 +18,13 @@ DEBUG = True  # Local development
 
 # Allowed hosts for local development
 # ALLOWED_HOSTS = ['localhost', '127.0.0.1']
-ALLOWED_HOSTS = [os.environ.get('WEBSITE_HOSTNAME'), 'hospitalmanagement2zy.azurewebsites.net']
-CSRF_TRUSTED_ORIGINS = ['https://hospitalmanagement2zy.azurewebsites.net']
+ALLOWED_HOSTS = [
+    'hospitalmanagement2zy-cfd9ahhud4cab6a6.centralindia-01.azurewebsites.net',
+    os.environ.get('WEBSITE_HOSTNAME'),  # optional dynamic
+]# settings.py
+CSRF_TRUSTED_ORIGINS = [
+    'https://hospitalmanagement2zy-cfd9ahhud4cab6a6.centralindia-01.azurewebsites.net'
+]
 
 # Ensure Django recognizes HTTPS behind Azure proxy
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
