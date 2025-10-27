@@ -86,7 +86,7 @@ WSGI_APPLICATION = 'hospitalmanagement.wsgi.application'
 # ---------------------------------------------------------------------
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg3',
+        'ENGINE': 'django.db.backends.postgresql',
         'NAME': os.environ.get('DB_NAME', 'hospitalsystem-database'),
         'USER': os.environ.get('DB_USER', 'uurzzjcygo'),
         'PASSWORD': os.environ.get('DB_PASSWORD', 'saaavMWOXUh$eMw6'),
