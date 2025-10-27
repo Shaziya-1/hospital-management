@@ -19,7 +19,7 @@ MEDIA_DIR = BASE_DIR / 'media'
 # ---------------------------------------------------------------------
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'your-secure-secret-key')
 
-# ✅ In Azure portal → Configuration → set DEBUG=False for production
+# ✅ Set DEBUG=False in Azure Configuration for production
 DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
 
 ALLOWED_HOSTS = [
@@ -29,7 +29,7 @@ ALLOWED_HOSTS = [
     '127.0.0.1',
 ]
 
-# ✅ CSRF trusted origins (match your Azure region + custom domains)
+# ✅ CSRF trusted origins
 CSRF_TRUSTED_ORIGINS = [
     'https://hospitalsystem.centralindia-01.azurewebsites.net',
     'https://*.centralindia-01.azurewebsites.net',
@@ -52,7 +52,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    # Local apps
+    # Local app
     'hospital',
 
     # Third-party
@@ -61,7 +61,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',  # For serving static files efficiently
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # ✅ Serve static files efficiently
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -96,14 +96,12 @@ WSGI_APPLICATION = 'hospitalmanagement.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('DB_NAME', 'hospitalsystem-database'),
-        'USER': os.environ.get('DB_USER', 'uurzzjcygo'),
-        'PASSWORD': os.environ.get('DB_PASSWORD', 'saaavMWOXUh$eMw6'),
-        'HOST': os.environ.get('DB_HOST', 'hospitalsystem-server.postgres.database.azure.com'),
+        'NAME': os.environ.get('DB_NAME', 'hospitalsystem_db'),
+        'USER': os.environ.get('DB_USER', 'your-db-user'),
+        'PASSWORD': os.environ.get('DB_PASSWORD', 'your-db-password'),
+        'HOST': os.environ.get('DB_HOST', 'your-db-server.postgres.database.azure.com'),
         'PORT': os.environ.get('DB_PORT', '5432'),
-        'OPTIONS': {
-            'sslmode': 'require',
-        },
+        'OPTIONS': {'sslmode': 'require'},
     }
 }
 
@@ -147,3 +145,18 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # DEFAULT AUTO FIELD
 # ---------------------------------------------------------------------
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# ---------------------------------------------------------------------
+# LOGGING (Optional for debugging 500 errors)
+# ---------------------------------------------------------------------
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {'class': 'logging.StreamHandler'},
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'WARNING',
+    },
+}
