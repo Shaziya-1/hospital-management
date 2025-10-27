@@ -17,24 +17,21 @@ MEDIA_DIR = BASE_DIR / 'media'
 # ---------------------------------------------------------------------
 # SECURITY SETTINGS
 # ---------------------------------------------------------------------
-SECRET_KEY = 'your-secret-key-for-local-dev'  # Replace with a secure one
-DEBUG = False  # ⚠️ Set to False for production
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'your-secure-secret-key')
+DEBUG = os.environ.get('DEBUG', 'False') == 'True'  # Safe default for production
 
 ALLOWED_HOSTS = [
-    'hospitalmanagement2zy-cfd9ahhud4cab6a6.centralindia-01.azurewebsites.net',
+    'hospitalsystem.centralindia-01.azurewebsites.net',  # your new app’s hostname
+    '.azurewebsites.net',
 ]
 
-
-# settings.py
+# CSRF & HTTPS Settings
 CSRF_TRUSTED_ORIGINS = [
-    'https://hospitalmanagement2zy-cfd9ahhud4cab6a6.centralindia-01.azurewebsites.net',
-    'https://*.centralindia-01.azurewebsites.net',  # optional wildcard
+    'https://hospitalsystem.centralindia-01.azurewebsites.net',
+    'https://*.centralindia-01.azurewebsites.net',
 ]
 
-# Recognize HTTPS behind Azure’s reverse proxy
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-
-# Force HTTPS
 SECURE_SSL_REDIRECT = True
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
@@ -55,7 +52,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',  # Serve static files efficiently
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # serve static files
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -85,12 +82,19 @@ TEMPLATES = [
 WSGI_APPLICATION = 'hospitalmanagement.wsgi.application'
 
 # ---------------------------------------------------------------------
-# DATABASE
+# DATABASE CONFIGURATION (PostgreSQL on Azure)
 # ---------------------------------------------------------------------
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ.get('DB_NAME', 'hospitalsystem-database'),
+        'USER': os.environ.get('DB_USER', 'uurzzjcygo'),
+        'PASSWORD': os.environ.get('DB_PASSWORD', 'saaavMWOXUh$eMw6'),
+        'HOST': os.environ.get('DB_HOST', 'hospitalsystem-server.postgres.database.azure.com'),
+        'PORT': os.environ.get('DB_PORT', '5432'),
+        'OPTIONS': {
+            'sslmode': 'require',
+        },
     }
 }
 
@@ -108,9 +112,8 @@ AUTH_PASSWORD_VALIDATORS = [
 # INTERNATIONALIZATION
 # ---------------------------------------------------------------------
 LANGUAGE_CODE = 'en-us'
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Kolkata'
 USE_I18N = True
-USE_L10N = True
 USE_TZ = True
 
 # ---------------------------------------------------------------------
@@ -121,7 +124,6 @@ STATICFILES_DIRS = [STATIC_DIR]
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-# Media files
 MEDIA_URL = '/media/'
 MEDIA_ROOT = MEDIA_DIR
 
@@ -129,8 +131,6 @@ MEDIA_ROOT = MEDIA_DIR
 # LOGIN & EMAIL
 # ---------------------------------------------------------------------
 LOGIN_REDIRECT_URL = '/afterlogin'
-
-# Email configuration (optional, for testing locally you can leave defaults)
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # ---------------------------------------------------------------------
