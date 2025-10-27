@@ -9,6 +9,7 @@ from pathlib import Path
 # ---------------------------------------------------------------------
 # BASE DIRECTORIES
 # ---------------------------------------------------------------------
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 TEMPLATE_DIR = BASE_DIR / 'templates'
 STATIC_DIR = BASE_DIR / 'static'
@@ -17,17 +18,17 @@ MEDIA_DIR = BASE_DIR / 'media'
 # ---------------------------------------------------------------------
 # SECURITY SETTINGS
 # ---------------------------------------------------------------------
-SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'your-secure-secret-key')
-DEBUG = os.environ.get('DEBUG', 'False') == 'True'  # Safe default for production
+
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'replace-this-with-a-secure-key')
+DEBUG = False
 
 ALLOWED_HOSTS = [
-    'hospitalsystem.centralindia-01.azurewebsites.net',  # your new app’s hostname
+    'hospitalmanagement2zy-cfd9ahhud4cab6a6.centralindia-01.azurewebsites.net',
     '.azurewebsites.net',
 ]
 
-# CSRF & HTTPS Settings
 CSRF_TRUSTED_ORIGINS = [
-    'https://hospitalsystem.centralindia-01.azurewebsites.net',
+    'https://hospitalmanagement2zy-cfd9ahhud4cab6a6.centralindia-01.azurewebsites.net',
     'https://*.centralindia-01.azurewebsites.net',
 ]
 
@@ -39,6 +40,7 @@ CSRF_COOKIE_SECURE = True
 # ---------------------------------------------------------------------
 # APPLICATION DEFINITION
 # ---------------------------------------------------------------------
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -52,7 +54,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',  # serve static files
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -82,25 +84,25 @@ TEMPLATES = [
 WSGI_APPLICATION = 'hospitalmanagement.wsgi.application'
 
 # ---------------------------------------------------------------------
-# DATABASE CONFIGURATION (PostgreSQL on Azure)
+# DATABASE CONFIGURATION
 # ---------------------------------------------------------------------
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('DB_NAME', 'hospitalsystem-database'),
-        'USER': os.environ.get('DB_USER', 'uurzzjcygo'),
-        'PASSWORD': os.environ.get('DB_PASSWORD', 'saaavMWOXUh$eMw6'),
-        'HOST': os.environ.get('DB_HOST', 'hospitalsystem-server.postgres.database.azure.com'),
-        'PORT': os.environ.get('DB_PORT', '5432'),
-        'OPTIONS': {
-            'sslmode': 'require',
-        },
+        'NAME': os.environ.get('DB_NAME'),
+        'USER': os.environ.get('DB_USER'),
+        'PASSWORD': os.environ.get('DB_PASSWORD'),
+        'HOST': os.environ.get('DB_HOST'),
+        'PORT': '5432',
+        'OPTIONS': {'sslmode': 'require'},
     }
 }
 
 # ---------------------------------------------------------------------
 # PASSWORD VALIDATION
 # ---------------------------------------------------------------------
+
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
     {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
@@ -111,6 +113,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # ---------------------------------------------------------------------
 # INTERNATIONALIZATION
 # ---------------------------------------------------------------------
+
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'Asia/Kolkata'
 USE_I18N = True
@@ -119,6 +122,7 @@ USE_TZ = True
 # ---------------------------------------------------------------------
 # STATIC & MEDIA FILES
 # ---------------------------------------------------------------------
+
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [STATIC_DIR]
 STATIC_ROOT = BASE_DIR / 'staticfiles'
@@ -130,10 +134,8 @@ MEDIA_ROOT = MEDIA_DIR
 # ---------------------------------------------------------------------
 # LOGIN & EMAIL
 # ---------------------------------------------------------------------
+
 LOGIN_REDIRECT_URL = '/afterlogin'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-# ---------------------------------------------------------------------
-# DEFAULT AUTO FIELD
-# ---------------------------------------------------------------------
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
