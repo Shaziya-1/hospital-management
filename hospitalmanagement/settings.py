@@ -1,6 +1,6 @@
 """
 Django settings for hospitalmanagement project.
-Configured for Azure deployment.
+Optimized for Azure App Service deployment.
 """
 
 import os
@@ -18,21 +18,26 @@ MEDIA_DIR = BASE_DIR / 'media'
 # SECURITY SETTINGS
 # ---------------------------------------------------------------------
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'your-secure-secret-key')
-DEBUG = os.environ.get('DEBUG', 'False') == 'True'  # Safe default for production
+
+# ✅ In Azure portal → Configuration → set DEBUG=False for production
+DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
 
 ALLOWED_HOSTS = [
     'hospitalsystem.centralindia-01.azurewebsites.net',
     '.azurewebsites.net',
+    'localhost',
+    '127.0.0.1',
 ]
 
-# CSRF & HTTPS Settings
+# ✅ CSRF trusted origins (match your Azure region + custom domains)
 CSRF_TRUSTED_ORIGINS = [
     'https://hospitalsystem.centralindia-01.azurewebsites.net',
     'https://*.centralindia-01.azurewebsites.net',
 ]
 
+# ✅ HTTPS / Security headers
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-SECURE_SSL_REDIRECT = True
+SECURE_SSL_REDIRECT = os.environ.get('SECURE_SSL_REDIRECT', 'True').lower() == 'true'
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 
@@ -46,13 +51,17 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # Local apps
     'hospital',
+
+    # Third-party
     'widget_tweaks',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',  # serve static files
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # For serving static files efficiently
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -82,7 +91,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'hospitalmanagement.wsgi.application'
 
 # ---------------------------------------------------------------------
-# DATABASE CONFIGURATION (PostgreSQL on Azure using psycopg3)
+# DATABASE CONFIGURATION (PostgreSQL on Azure)
 # ---------------------------------------------------------------------
 DATABASES = {
     'default': {
@@ -131,6 +140,7 @@ MEDIA_ROOT = MEDIA_DIR
 # LOGIN & EMAIL
 # ---------------------------------------------------------------------
 LOGIN_REDIRECT_URL = '/afterlogin'
+LOGOUT_REDIRECT_URL = '/'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # ---------------------------------------------------------------------
