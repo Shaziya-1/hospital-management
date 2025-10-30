@@ -277,7 +277,7 @@
   <nav class="menu" tabindex="0">
     <div class="smartphone-menu-trigger"></div>
     <header class="avatar">
-      <img src="{% static doctor.profile_pic.url %}" alt="Profile Pic" />
+<img src="{{ doctor.profile_pic.url }}" alt="Profile Pic" height="40" width="40" style="border-radius:50%; object-fit:cover;" />
       <br><br>
       <h6>Doctor</h6>
       <h2>{{request.user.first_name}}</h2>

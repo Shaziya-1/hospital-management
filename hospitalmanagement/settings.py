@@ -1,6 +1,6 @@
 """
 Django settings for hospitalmanagement project.
-Optimized for Azure App Service deployment.
+Optimized for Azure App Service deployment and local development.
 """
 
 import os
@@ -19,27 +19,27 @@ MEDIA_DIR = BASE_DIR / 'media'
 # ---------------------------------------------------------------------
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'your-secure-secret-key')
 
-# ✅ In Azure portal → Configuration → set DEBUG=False for production
-DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
+# ✅ Debug mode — turn False in production (set in Azure Configuration)
+DEBUG = os.environ.get('DEBUG', 'True').lower() == 'true'
 
 ALLOWED_HOSTS = [
-    'hospitalsystem.centralindia-01.azurewebsites.net',
+    'hospitalsystem-hzbfh9ddh2b9eecy.centralindia-01.azurewebsites.net',
     '.azurewebsites.net',
     'localhost',
     '127.0.0.1',
 ]
 
-# ✅ CSRF trusted origins (match your Azure region + custom domains)
+# ✅ CSRF trusted origins
 CSRF_TRUSTED_ORIGINS = [
-    'https://hospitalsystem.centralindia-01.azurewebsites.net',
+    'https://hospitalsystem-hzbfh9ddh2b9eecy.centralindia-01.azurewebsites.net',
     'https://*.centralindia-01.azurewebsites.net',
 ]
 
 # ✅ HTTPS / Security headers
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-SECURE_SSL_REDIRECT = os.environ.get('SECURE_SSL_REDIRECT', 'True').lower() == 'true'
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
+SECURE_SSL_REDIRECT = os.environ.get('SECURE_SSL_REDIRECT', 'False').lower() == 'true'
+SESSION_COOKIE_SECURE = False  # Set True only in Azure
+CSRF_COOKIE_SECURE = False     # Set True only in Azure
 
 # ---------------------------------------------------------------------
 # APPLICATION DEFINITION
@@ -52,7 +52,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    # Local apps
+    # Local app
     'hospital',
 
     # Third-party
@@ -61,7 +61,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',  # For serving static files efficiently
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # Efficient static file serving
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -91,21 +91,30 @@ TEMPLATES = [
 WSGI_APPLICATION = 'hospitalmanagement.wsgi.application'
 
 # ---------------------------------------------------------------------
-# DATABASE CONFIGURATION (PostgreSQL on Azure)
+# DATABASE CONFIGURATION (SQLite for local, PostgreSQL for Azure)
 # ---------------------------------------------------------------------
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('DB_NAME', 'hospitalsystem-database'),
-        'USER': os.environ.get('DB_USER', 'uurzzjcygo'),
-        'PASSWORD': os.environ.get('DB_PASSWORD', 'saaavMWOXUh$eMw6'),
-        'HOST': os.environ.get('DB_HOST', 'hospitalsystem-server.postgres.database.azure.com'),
-        'PORT': os.environ.get('DB_PORT', '5432'),
-        'OPTIONS': {
-            'sslmode': 'require',
-        },
+if os.getenv('RUNNING_ON_AZURE', '').lower() == 'true':
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.environ.get('DB_NAME', 'hospital_db'),
+            'USER': os.environ.get('DB_USER', 'hospitaladmin@hospitalsystem-shaziya-db'),
+            'PASSWORD': os.environ.get('DB_PASSWORD', 'Shaziy@1432'),
+            'HOST': os.environ.get('DB_HOST', 'hospitalsystem-shaziya-db.postgres.database.azure.com'),
+            'PORT': os.environ.get('DB_PORT', '5432'),
+            'OPTIONS': {
+                'sslmode': 'require',
+            },
+        }
     }
-}
+else:
+    # Local SQLite database
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 # ---------------------------------------------------------------------
 # PASSWORD VALIDATION
