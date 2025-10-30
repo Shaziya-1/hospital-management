@@ -99,7 +99,7 @@ if os.getenv('RUNNING_ON_AZURE', '').lower() == 'true':
             'ENGINE': 'django.db.backends.postgresql',
             'NAME': os.environ.get('DB_NAME', 'hospital_db'),
             'USER': os.environ.get('DB_USER', 'hospitaladmin@hospitalsystem-shaziya-db'),
-            'PASSWORD': os.environ.get('DB_PASSWORD', 'Shaziy@1432'),
+            'PASSWORD': os.environ.get('DB_PASSWORD', 'Shaziy@2025!'),
             'HOST': os.environ.get('DB_HOST', 'hospitalsystem-shaziya-db.postgres.database.azure.com'),
             'PORT': os.environ.get('DB_PORT', '5432'),
             'OPTIONS': {
